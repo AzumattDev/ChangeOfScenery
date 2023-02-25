@@ -112,7 +112,11 @@ static class MusicManTriggerMusicPatch
     {
         if (name == "menu")
         {
-            MusicMan.instance.Reset();
+            if (MusicMan.instance != null)
+            {
+                MusicMan.instance.Reset();
+            }
+
             StreamAudio(ChangeOfSceneryPlugin.customsong.Value);
         }
 
@@ -144,12 +148,17 @@ static class MusicManTriggerMusicPatch
                 //MusicMan.instance.StartMusic("menu");
                 if (MusicMan.instance.m_musicSource.clip != audioClip)
                 {
-                    MusicMan.instance.m_musicSource.clip = audioClip;
-                    MusicMan.instance.m_musicSource.enabled = true;
-                    MusicMan.instance.m_musicSource.Play();
-                    MusicMan.instance.m_musicSource.loop = true;
-                    MusicMan.instance.m_musicSource.volume = 15;
-                    ChangeOfSceneryPlugin.ChangeOfSceneryLogger.LogDebug($"Streaming audio from: {url}.");
+                    if (MusicMan.instance != null)
+                    {
+                        MusicMan.instance.m_musicSource.clip = audioClip;
+                        MusicMan.instance.m_musicSource.enabled = true;
+                        if(MusicMan.instance.m_musicSource.isPlaying)
+                            MusicMan.instance.m_musicSource.Stop();
+                        MusicMan.instance.m_musicSource.Play();
+                        MusicMan.instance.m_musicSource.loop = true;
+                        MusicMan.instance.m_musicSource.volume = 15;
+                        ChangeOfSceneryPlugin.ChangeOfSceneryLogger.LogDebug($"Streaming audio from: {url}.");
+                    }
                 }
             }
         }

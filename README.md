@@ -9,7 +9,6 @@
 
 `Feel free to reach out to me on discord if you need manual download assistance.`
 
-
 # Author Information
 
 ### Azumatt
@@ -26,6 +25,7 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 > # Update Information (Latest listed first)
 
-| `Version` | `Update Notes`   |
-|-----------|------------------|
-| 1.0.0     | - Initial Relase |
+| `Version` | `Update Notes`                                                                             |
+|-----------|--------------------------------------------------------------------------------------------|
+| 1.0.1     | Attempted fix at logout & back in issue causing the audio source to fail to load properly. |
+| 1.0.0     | - Initial Release                                                                          |
