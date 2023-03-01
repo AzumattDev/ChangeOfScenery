@@ -82,8 +82,11 @@ static class FejdStartupShowCharacterSelectionPatch
         {
             __instance.m_characterPreviewPoint.rotation = Quaternion.Euler(0,
                 __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 180, 0);
-            __instance.m_playerInstance.transform.rotation = Quaternion.Euler(0,
-                __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 180, 0);
+            if (__instance.m_playerInstance)
+            {
+                __instance.m_playerInstance.transform.rotation = Quaternion.Euler(0,
+                    __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 180, 0);
+            }
         }
 
     }
@@ -97,7 +100,11 @@ static class FejdStartupOnCharacterStartPatch
         if (ChangeOfSceneryPlugin.UsePreset.Value == ChangeOfSceneryPlugin.Toggle.On)
         {
             __instance.m_characterPreviewPoint.rotation = Quaternion.Euler(0, __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 40, 0);
-            __instance.m_playerInstance.transform.rotation = Quaternion.Euler(0, __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 40, 0);
+            if (__instance.m_playerInstance)
+            {
+                __instance.m_playerInstance.transform.rotation = Quaternion.Euler(0,
+                    __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 40, 0);
+            }
         }
     }
 }

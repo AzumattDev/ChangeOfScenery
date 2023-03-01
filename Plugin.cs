@@ -5,6 +5,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace ChangeOfScenery
@@ -13,7 +14,7 @@ namespace ChangeOfScenery
     public class ChangeOfSceneryPlugin : BaseUnityPlugin
     {
         internal const string ModName = "ChangeOfScenery";
-        internal const string ModVersion = "1.0.1";
+        internal const string ModVersion = "1.0.2";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
@@ -326,7 +327,7 @@ namespace ChangeOfScenery
 
         private class ConfigurationManagerAttributes
         {
-            public bool? Browsable = false;
+            [UsedImplicitly] public bool? Browsable = false;
         }
 
         class AcceptableShortcuts : AcceptableValueBase
