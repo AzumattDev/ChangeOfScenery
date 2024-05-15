@@ -1,5 +1,6 @@
 | `Version` | `Update Notes`                                                                                                    |
 |-----------|-------------------------------------------------------------------------------------------------------------------|
+| 1.0.5     | - Update for latest Valheim version (Ashlands)                                                                    |
 | 1.0.4     | - Update for latest Valheim version                                                                               |
 | 1.0.3     | - Update for latest Valheim version                                                                               |
 | 1.0.2     | - Fix an issue that could lock your game, preventing character creation if you didn't have any characters at all. |
