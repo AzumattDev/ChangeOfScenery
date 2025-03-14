@@ -13,7 +13,9 @@ namespace ChangeOfScenery;
 static class FejdStartupSetupGuiPatch
 {
     static GameObject _props = null!;
-    static GameObject _mMenuFire = null!;
+    public static GameObject _mMenuFire = null!;
+    public static GameObject clonedFire = null!;
+
     static void Postfix(FejdStartup __instance)
     {
         Functions.GatherDefaultCamLocations(__instance);
@@ -40,15 +42,17 @@ static class FejdStartupSetupGuiPatch
         {
             ChangeOfSceneryPlugin.ChangeOfSceneryLogger.LogError("Props not found");
         }
-        
-        var fireclone = UnityEngine.Object.Instantiate(_mMenuFire, ChangeOfSceneryPlugin.m_characterPreviewPositionPreset1 + new Vector3(1, 0, 1), Quaternion.identity);
-        fireclone.AddComponent<TerrainModifier>().m_levelRadius = 4;
-        fireclone.AddComponent<TerrainModifier>().m_smoothRadius = 8;
-        fireclone.AddComponent<TerrainModifier>().m_smoothPower = 2;
-        fireclone.AddComponent<TerrainModifier>().m_smooth = true;
-        fireclone.AddComponent<TerrainModifier>().m_paintCleared = false;
-        fireclone.AddComponent<TerrainModifier>().m_paintType = TerrainModifier.PaintType.Paved;
-        fireclone.AddComponent<TerrainModifier>().m_paintRadius = 3;
+
+        clonedFire = UnityEngine.Object.Instantiate(_mMenuFire, ChangeOfSceneryPlugin.MFirePosition.Value, Quaternion.identity);
+        TerrainModifier? comp = clonedFire.AddComponent<TerrainModifier>();
+        comp.m_level = true;
+        comp.m_levelRadius = 4;
+        comp.m_smoothRadius = 8;
+        comp.m_smoothPower = 2;
+        comp.m_smooth = true;
+        comp.m_paintCleared = true;
+        comp.m_paintType = TerrainModifier.PaintType.Paved;
+        comp.m_paintRadius = 3;
 
         Functions.UpdateAndSet();
     }
@@ -69,7 +73,6 @@ static class FejdStartupUpdateCameraPatch
         {
             Utils.GetMainCamera().GetComponent<DepthOfField>().enabled = false;
         }
-
     }
 }
 
@@ -88,11 +91,10 @@ static class FejdStartupShowCharacterSelectionPatch
                     __instance.m_cameraMarkerCharacter.rotation.eulerAngles.y - 180, 0);
             }
         }
-
     }
 }
 
-[HarmonyPatch(typeof(FejdStartup),nameof(FejdStartup.OnCharacterStart))]
+[HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.OnCharacterStart))]
 static class FejdStartupOnCharacterStartPatch
 {
     static void Prefix(FejdStartup __instance)
@@ -109,12 +111,12 @@ static class FejdStartupOnCharacterStartPatch
     }
 }
 
-[HarmonyPatch(typeof(MusicMan),nameof(MusicMan.TriggerMusic))]
+[HarmonyPatch(typeof(MusicMan), nameof(MusicMan.TriggerMusic))]
 static class MusicManTriggerMusicPatch
 {
     public static AudioSource audioSource = null!;
     public static Coroutine? AudioStart;
-    
+
     static void Postfix(MusicMan __instance, ref string name)
     {
         if (name == "menu")
@@ -126,9 +128,8 @@ static class MusicManTriggerMusicPatch
 
             StreamAudio(ChangeOfSceneryPlugin.customsong.Value);
         }
-
     }
-    
+
     public static void StreamAudio(string url)
     {
         AudioStart = ChangeOfSceneryPlugin.instance.StartCoroutine(StreamAudioFromURL(url));
@@ -143,6 +144,7 @@ static class MusicManTriggerMusicPatch
             {
                 yield return new WaitForSeconds(0.1f);
             }
+
             if (www.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError
                 or UnityWebRequest.Result.DataProcessingError)
             {
@@ -151,7 +153,7 @@ static class MusicManTriggerMusicPatch
             else
             {
                 AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
-                MusicMan.instance.FindMusic("menu").m_clips = new[] {audioClip};
+                MusicMan.instance.FindMusic("menu").m_clips = new[] { audioClip };
                 //MusicMan.instance.StartMusic("menu");
                 if (MusicMan.instance.m_musicSource.clip != audioClip)
                 {
@@ -159,7 +161,7 @@ static class MusicManTriggerMusicPatch
                     {
                         MusicMan.instance.m_musicSource.clip = audioClip;
                         MusicMan.instance.m_musicSource.enabled = true;
-                        if(MusicMan.instance.m_musicSource.isPlaying)
+                        if (MusicMan.instance.m_musicSource.isPlaying)
                             MusicMan.instance.m_musicSource.Stop();
                         MusicMan.instance.m_musicSource.Play();
                         MusicMan.instance.m_musicSource.loop = true;
@@ -172,7 +174,7 @@ static class MusicManTriggerMusicPatch
     }
 }
 
-[HarmonyPatch(typeof(FejdStartup),nameof(FejdStartup.LoadMainScene))]
+[HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.LoadMainScene))]
 static class LoadMainScenePatch
 {
     static void Prefix(SceneManager __instance)

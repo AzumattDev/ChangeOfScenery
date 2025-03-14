@@ -14,7 +14,7 @@ namespace ChangeOfScenery
     public class ChangeOfSceneryPlugin : BaseUnityPlugin
     {
         internal const string ModName = "ChangeOfScenery";
-        internal const string ModVersion = "1.0.5";
+        internal const string ModVersion = "1.0.6";
         internal const string Author = "Azumatt";
         private const string ModGUID = Author + "." + ModName;
         private static string ConfigFileName = ModGUID + ".cfg";
@@ -161,10 +161,8 @@ namespace ChangeOfScenery
             MPlayerRotation.SettingChanged += (_, _) => { UpdatePlayerPosition(); };
             
 
-            MFirePosition = config("3 - Fire Position", "Fire Position", new Vector3(-11.264f, 36.5f, -68.486f),
-                "The position to spawn the Fire at.");
-            
-            MFirePosition.SettingChanged += (_, _) => { UpdatePlayerPosition(); };
+            MFirePosition = config("3 - Fire Position", "Fire Position", new Vector3(-203.51f,36.50f,158.53f), "The position to spawn the Fire at.");
+            MFirePosition.SettingChanged += (_, _) => { UpdateFirePosition(); };
             
             customsong = config("4 - Custom Song", "Custom Song",
                 "https://cdn.pixabay.com/download/audio/2022/08/17/audio_a52363b467.mp3?filename=the-gift-pagan-norse-background-music-117479.mp3",
@@ -235,6 +233,10 @@ namespace ChangeOfScenery
         private void UpdateFirePosition()
         {
             // TODO: Implement this
+            if (FejdStartup.instance == null) return;
+            Transform? fire = FejdStartupSetupGuiPatch.clonedFire.transform;
+            if (fire == null) return;
+            fire.position = MFirePosition.Value;
         }
 
         private void UpdateCameraRotations()
@@ -328,19 +330,6 @@ namespace ChangeOfScenery
         private class ConfigurationManagerAttributes
         {
             [UsedImplicitly] public bool? Browsable = false;
-        }
-
-        class AcceptableShortcuts : AcceptableValueBase
-        {
-            public AcceptableShortcuts() : base(typeof(KeyboardShortcut))
-            {
-            }
-
-            public override object Clamp(object value) => value;
-            public override bool IsValid(object value) => true;
-
-            public override string ToDescriptionString() =>
-                "# Acceptable values: " + string.Join(", ", KeyboardShortcut.AllKeyCodes);
         }
 
         #endregion
